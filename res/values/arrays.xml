@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="JFkind">
+        <item >读书	3分</item>
+        <item >运动	3分</item>
+        <item >辩论	2分</item>
+        <item >棋牌	1分</item>
+    </string-array>
+</resources>
