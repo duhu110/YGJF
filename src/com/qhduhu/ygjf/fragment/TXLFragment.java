@@ -1,14 +1,19 @@
 package com.qhduhu.ygjf.fragment;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.qhduhu.ygjf.R;
 import com.qhduhu.ygjf.db.DBManager;
 import com.qhduhu.ygjf.entity.TXLEntity;
+import com.qhduhu.ygjf.sortlist.CharacterParser;
+import com.qhduhu.ygjf.sortlist.ClearEditText;
+import com.qhduhu.ygjf.sortlist.PinyinComparator;
+import com.qhduhu.ygjf.sortlist.SideBar;
+import com.qhduhu.ygjf.sortlist.SideBar.OnTouchingLetterChangedListener;
+import com.qhduhu.ygjf.sortlist.SortAdapter;
 import android.annotation.SuppressLint;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -16,6 +21,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -28,17 +34,29 @@ import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
-public class TXLFragment extends SherlockFragment implements OnItemClickListener, OnItemLongClickListener {
-	private ListView listView;
+@SuppressLint("DefaultLocale")
+public class TXLFragment extends SherlockFragment {
 	private DBManager dbManager;
-	private SimpleAdapter adapter;
-	private EditText sarch;
+	private String TAG = "TXLFragment---TAG";
+	private ListView listView;
+	private SideBar sideBar;
+	private TextView dialog;
+	private SortAdapter adapter;
+	private ClearEditText mClearEditText;
+	/**
+	 * 汉字转换成拼音的类
+	 */
+	private CharacterParser characterParser;
+	private List<TXLEntity> SourceDateList;
+
+	/**
+	 * 根据拼音来排列ListView里面的数据类
+	 */
+	private PinyinComparator pinyinComparator;
 
 	public static TXLFragment newInstance() {
 		TXLFragment fragment = new TXLFragment();
@@ -49,36 +67,167 @@ public class TXLFragment extends SherlockFragment implements OnItemClickListener
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_txl, null);
-		listView = (ListView) view.findViewById(R.id.txl_lv);
+
+		characterParser = CharacterParser.getInstance();
+		pinyinComparator = new PinyinComparator();
 		dbManager = new DBManager(getActivity());
-		adapter = new SimpleAdapter(getActivity(), getData(), R.layout.contact_item,
-				new String[] { "name", "tel", "dept" },
-				new int[] { R.id.txl_item_name, R.id.txl_item_tel, R.id.txl_item_dept });
-		listView.setAdapter(adapter);
-		listView.setOnItemClickListener(this);
-		listView.setOnItemLongClickListener(this);
-		sarch=(EditText) view.findViewById(R.id.txl_serchet);
+
+		sideBar = (SideBar) view.findViewById(R.id.sidrbar);
+		dialog = (TextView) view.findViewById(R.id.dialog);
+		sideBar.setTextView(dialog);
+
+		sideBar.setOnTouchingLetterChangedListener(new OnTouchingLetterChangedListener() {
+
+			@Override
+			public void onTouchingLetterChanged(String s) {
+				// 该字母首次出现的位置
+				int position = adapter.getPositionForSection(s.charAt(0));
+				if (position != -1) {
+					listView.setSelection(position);
+				}
+
+			}
+		});
+		listView = (ListView) view.findViewById(R.id.country_lvcountry);
 		
+		listView.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				// 这里要利用adapter.getItem(position)来获取当前position所对应的对象
+				// ((SortModel)adapter.getItem(position)).getName()
+				Log.d(TAG, "按钮成功");
+				final TXLEntity entity = (TXLEntity) adapter.getItem(position);
+				Log.d(TAG,entity.txl_name);
+				listView.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
+					@Override
+					public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+						menu.setHeaderTitle(entity.txl_name);
+						menu.add(0, 1, Menu.NONE, "拨打电话");
+						menu.add(0, 2, Menu.NONE, "发送短信");
+						menu.add(0, 3, Menu.NONE, "复制到剪切板");
+						menu.add(0, 4, Menu.NONE, "发送邮件");
+						menu.add(0, 5, Menu.NONE, "取消");
+					}
+				});
+			}
+		});
+
+		List<TXLEntity> list = new ArrayList<TXLEntity>();
+		list = dbManager.querytxl();
+		dbManager.closeDB();
+		Log.d("tagggggggggggg", list.get(3).getTxl_dept());
+
+		
+		SourceDateList = filledData(list);
+		// 根据a-z进行排序源数据
+		Collections.sort(this.SourceDateList, pinyinComparator);
+
+		adapter = new SortAdapter(getActivity(), SourceDateList);
+		listView.setAdapter(adapter);
+		mClearEditText = (ClearEditText) view.findViewById(R.id.filter_edit);
+		// 根据输入框输入值的改变来过滤搜索
+		mClearEditText.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				// 当输入框里面的值为空，更新为原来的列表，否则为过滤数据列表
+				filterData(s.toString());
+			}
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+			}
+			@Override
+			public void afterTextChanged(Editable s) {
+			}
+		});
+
 		return view;
 	}
 
-	private List<Map<String, Object>> getData() {
+	@SuppressLint("DefaultLocale")
+	private List<TXLEntity> filledData(List<TXLEntity> list) {
 
-		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		List<TXLEntity> txlEntities = dbManager.querytxl();
-		dbManager.closeDB();
+		List<TXLEntity> mList = new ArrayList<TXLEntity>();
 
-		for (TXLEntity txlEntity : txlEntities) {
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("name", txlEntity.txl_name);
-			map.put("tel", txlEntity.txl_tel);
-			map.put("dept", txlEntity.txl_dept);
-			map.put("mail", txlEntity.txl_mail);
-			Log.d("tagggggggggggggg", map.toString());
-			list.add(map);
+		for (int j = 0; j < list.size(); j++) {
+			TXLEntity entity3 = new TXLEntity();
+			entity3.setTxl_name(list.get(j).getTxl_name());
+			entity3.setTxl_dept(list.get(j).getTxl_dept());
+			entity3.setTxl_tel(list.get(j).getTxl_tel());
+			entity3.setTxl_mail(list.get(j).getTxl_mail());
+			String pinyin = characterParser.getSelling(list.get(j).getTxl_name());
+			String sortString = pinyin.substring(0, 1).toUpperCase();
+			// 正则表达式，判断首字母是否是英文字母
+			if (sortString.matches("[A-Z]")) {
+				entity3.setSortLetters(sortString.toUpperCase());
+			} else {
+				entity3.setSortLetters("#");
+			}
+
+			mList.add(entity3);
 		}
+		return mList;
+	}
 
-		return list;
+	@SuppressWarnings("deprecation")
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+		TXLEntity entity = new TXLEntity();
+		entity = (TXLEntity) this.adapter.getItem(info.position);
+		Log.d(TAG, entity.toString());
+		String name = entity.txl_name;
+		String phone_number = entity.txl_tel.trim();
+		// 删除字符串首部和尾部的空格
+		String dept = entity.txl_dept;
+		String mail = entity.txl_mail;
+		switch (item.getItemId()) {
+		case 1:
+			if (phone_number != null && !phone_number.equals("")) {
+				// 调用系统的拨号服务实现电话拨打功能
+				// 封装一个拨打电话的intent，并且将电话号码包装成一个Uri对象传入
+				Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone_number));
+				getActivity().startActivity(intent);// 内部类
+			}
+			break;
+		case 2:
+			if (phone_number != null && !phone_number.equals("")) {
+				// 调用系统的拨号服务实现电话拨打功能
+				// 封装一个拨打电话的intent，并且将电话号码包装成一个Uri对象传入
+				Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + phone_number));
+				getActivity().startActivity(intent);// 内部类
+			}
+			break;
+		case 3:
+			String string = "姓名:" + name + ";电话:" + phone_number + ";部门:" + dept + "。本信息来自“我的公会”，请尽快安装！";
+			ClipboardManager clipboardManager = (ClipboardManager) getActivity()
+					.getSystemService(Context.CLIPBOARD_SERVICE);
+			clipboardManager.setText(string);
+			Toast.makeText(getActivity(), name + "信息复制成功！", Toast.LENGTH_SHORT).show();
+			break;
+		case 4:
+			// 建立Intent对象
+			Intent intent = new Intent();
+			// 设置对象动作
+			intent.setAction(Intent.ACTION_SEND);
+			// 设置对方邮件地址
+			intent.putExtra(Intent.EXTRA_EMAIL, new String[] { mail, mail });
+			// 设置标题内容
+			intent.putExtra(Intent.EXTRA_SUBJECT, "我的公会");
+			// 设置邮件文本内容
+			intent.putExtra(Intent.EXTRA_TEXT, "发自我的公会APP");
+			// 启动一个新的ACTIVITY,"Sending mail..."是在启动这个
+			// ACTIVITY的等待时间时所显示的文字
+			startActivity(Intent.createChooser(intent, "Sending    mail..."));
+			break;
+		case 5:
+			break;
+		default:
+			break;
+		}
+		
+		
+		
+		return super.onContextItemSelected(item);
 	}
 
 	@Override
@@ -86,102 +235,28 @@ public class TXLFragment extends SherlockFragment implements OnItemClickListener
 		outState.putString(null, "fixbug");
 		super.onSaveInstanceState(outState);
 	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-
-		Map<String, Object> map = new HashMap<String, Object>();
-		map = (Map<String, Object>) this.adapter.getItem(arg2);
-		Log.d("tagggggggggggggg", map.toString());
-
-		String phone_number = map.get("tel").toString();
-
-		Log.d("tagggggggggggggggg", phone_number);
-		phone_number = phone_number.trim();// 删除字符串首部和尾部的空格
-		if (phone_number != null && !phone_number.equals("")) {
-			// 调用系统的拨号服务实现电话拨打功能
-			// 封装一个拨打电话的intent，并且将电话号码包装成一个Uri对象传入
-			Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone_number));
-			getActivity().startActivity(intent);// 内部类
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-		Map<String, Object> map = new HashMap<String, Object>();
-		map = (Map<String, Object>) this.adapter.getItem(position);
-		Log.d("tagggggggggggggg", map.toString());
-		final String string = map.get("name").toString();
-		listView.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
-			@Override
-			public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
-				menu.setHeaderTitle(string);
-				menu.add(0, 1, Menu.NONE, "发送短信");
-				menu.add(0, 2, Menu.NONE, "复制到剪切板");
-				menu.add(0, 3, Menu.NONE, "发送邮件");
-				menu.add(0, 4, Menu.NONE, "取消");
+	/**
+	 * 根据输入框中的值来过滤数据并更新ListView
+	 * @param filterStr
+	 */
+	private void filterData(String filterStr){
+		List<TXLEntity> filterDateList = new ArrayList<TXLEntity>();
+		
+		if(TextUtils.isEmpty(filterStr)){
+			filterDateList = SourceDateList;
+		}else{
+			filterDateList.clear();
+			for(TXLEntity entity : SourceDateList){
+				String name = entity.getTxl_name();
+				if(name.indexOf(filterStr.toString()) != -1 || characterParser.getSelling(name).startsWith(filterStr.toString())){
+					filterDateList.add(entity);
+				}
 			}
-		});
-
-		return false;
+		}
+		
+		// 根据a-z进行排序
+		Collections.sort(filterDateList, pinyinComparator);
+		adapter.updateListView(filterDateList);
 	}
-
-	@SuppressWarnings({ "unchecked", "deprecation" })
-	@Override
-	public boolean onContextItemSelected(MenuItem item) {
-		AdapterContextMenuInfo adapterContextMenuInfo = (AdapterContextMenuInfo) item.getMenuInfo();
-		
-		Map<String, Object> map = new HashMap<String, Object>();
-		map = (Map<String, Object>) this.adapter.getItem(adapterContextMenuInfo.position);
-		Log.d("tagggggggggggggg", map.toString());
-		String name = map.get("name").toString();
-		String phone_number = map.get("tel").toString();
-		String dept = map.get("dept").toString();
-		String mail = map.get("mail").toString();
-		
-		
-		switch (item.getItemId()) {
-		case 1:
-												
-	           phone_number = phone_number.trim();//删除字符串首部和尾部的空格
-	           if(phone_number != null && !phone_number.equals(""))
-	           {
-	               //调用系统的拨号服务实现电话拨打功能
-	               //封装一个拨打电话的intent，并且将电话号码包装成一个Uri对象传入
-	               Intent intent = new Intent(Intent.ACTION_SENDTO,Uri.parse("smsto:"+phone_number));
-	               getActivity().startActivity(intent);//内部类
-	           }
-			break;
-		case 2:
-			String string = "姓名:"+name+";电话:"+phone_number+";部门:"+dept+"。本信息来自“我的公会”，请尽快安装！";
-			ClipboardManager clipboardManager =
-					(ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-			clipboardManager.setText(string);
-			Toast.makeText(getActivity(), name+"信息复制成功！", Toast.LENGTH_SHORT).show();
-			break;
-		case 3:
-			//建立Intent对象  
-			Intent intent = new Intent();  
-			//设置对象动作  
-			intent.setAction(Intent.ACTION_SEND);  
-			//设置对方邮件地址  
-			intent.putExtra(Intent.EXTRA_EMAIL, new String[]    
-			{ mail,mail });   
-			//设置标题内容  
-			intent.putExtra(Intent.EXTRA_SUBJECT, "我的公会");  
-			//设置邮件文本内容  
-			intent.putExtra(Intent.EXTRA_TEXT, "发自我的公会APP");  
-			//启动一个新的ACTIVITY,"Sending mail..."是在启动这个   
-			// ACTIVITY的等待时间时所显示的文字  
-			startActivity(Intent.createChooser(intent, "Sending    mail..."));          
-			break;
-		case 4:
-			break;
-
-		default:
-			break;
-		}return super.onContextItemSelected(item);
-}
+	
 }

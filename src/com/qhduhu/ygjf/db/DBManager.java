@@ -49,14 +49,24 @@ public class DBManager {
         try {  
             for (TXLEntity txlEntity : txlentities) {  
                 db.execSQL("INSERT INTO txl VALUES(null, ?, ?, ?, ?)",
-                		new Object[]{txlEntity.txl_name,txlEntity.txl_tel,txlEntity.txl_dept,txlEntity.txl_mail});  
+                		new Object[]{txlEntity.txl_name,txlEntity.txl_dept,txlEntity.txl_tel,txlEntity.txl_mail});  
             }  
             db.setTransactionSuccessful();  //设置事务成功完成  
         } finally {  
             db.endTransaction();    //结束事务  
         }  
 	}
-     
+     public void DeleteTXL() {
+    	 db.beginTransaction();  //开始事务  
+         try {  
+             
+                 db.execSQL("DELETE FROM txl");  
+              
+             db.setTransactionSuccessful();  //设置事务成功完成  
+         } finally {  
+             db.endTransaction();    //结束事务  
+         }  
+	}
     
 //    public void updateAge(Person person) {  
 //        ContentValues cv = new ContentValues();  

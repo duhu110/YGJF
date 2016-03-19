@@ -36,23 +36,9 @@ public class ADDJFActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-
-				
-				ArrayList<TXLEntity> txlEntities = new ArrayList<TXLEntity>();
-				TXLEntity txlEntity = new TXLEntity("都护", "17797174400", "领导", "duhushrat126.com");
-				TXLEntity txlEntity1 = new TXLEntity("都护1", "17797174400", "领导", "duhushr126.com");
-				TXLEntity txlEntity2 = new TXLEntity("都护2", "17797174400", "领导", "duhushr126.com");
-				TXLEntity txlEntity3 = new TXLEntity("都护3", "17797174400", "领导", "duhushr126.com");
-				TXLEntity txlEntity4 = new TXLEntity("都护4", "17797174400", "领导", "duhushr126.com");
-				TXLEntity txlEntity5 = new TXLEntity("都护5", "17797174400", "领导", "duhushr126.com");
-				txlEntities.add(txlEntity);
-				txlEntities.add(txlEntity1);
-				txlEntities.add(txlEntity2);
-				txlEntities.add(txlEntity3);
-				txlEntities.add(txlEntity4);
-				txlEntities.add(txlEntity5);
-				
-				db.addtxl(txlEntities);
+	
+							
+			//	db.addtxl(txlEntities);
 				Log.d(null, "测试数据增加成功");
 			}
 		});
@@ -66,7 +52,10 @@ public class ADDJFActivity extends Activity {
 		getActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.actionbar_tab_bg));
 		
 	}
-//
+
+	
+	
+
 //	@Override
 //	public boolean onCreateOptionsMenu(Menu menu) {
 //		// Inflate the menu; this adds items to the action bar if it is present.
