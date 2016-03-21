@@ -1,47 +1,22 @@
 package com.qhduhu.ygjf.activity;
 
-import java.util.ArrayList;
-
 import com.qhduhu.ygjf.R;
-import com.qhduhu.ygjf.db.DBManager;
-import com.qhduhu.ygjf.entity.TXLEntity;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.TextView;
 
 public class ADDJFActivity extends Activity {
 	
-	private TextView tvtest;
-	private Button btsubmit;
-	private DBManager db;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_addjf);
 		initactiongbar();
-		tvtest=(TextView) findViewById(R.id.add_testtv);
-		btsubmit=(Button) findViewById(R.id.addjf_confirm);
 		Intent intent = getIntent();
 		String string = intent.getStringExtra("addnew");
-		tvtest.setText(string);
-		db=new DBManager(this);
-		btsubmit.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-	
-							
-			//	db.addtxl(txlEntities);
-				Log.d(null, "测试数据增加成功");
-			}
-		});
+
+
 		
 	}
 

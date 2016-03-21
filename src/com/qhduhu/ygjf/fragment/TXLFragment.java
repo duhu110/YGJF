@@ -34,6 +34,7 @@ import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,6 +48,7 @@ public class TXLFragment extends SherlockFragment {
 	private TextView dialog;
 	private SortAdapter adapter;
 	private ClearEditText mClearEditText;
+	
 	/**
 	 * 汉字转换成拼音的类
 	 */
@@ -89,28 +91,56 @@ public class TXLFragment extends SherlockFragment {
 			}
 		});
 		listView = (ListView) view.findViewById(R.id.country_lvcountry);
-		
 		listView.setOnItemClickListener(new OnItemClickListener() {
+
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				// 这里要利用adapter.getItem(position)来获取当前position所对应的对象
-				// ((SortModel)adapter.getItem(position)).getName()
-				Log.d(TAG, "按钮成功");
-				final TXLEntity entity = (TXLEntity) adapter.getItem(position);
-				Log.d(TAG,entity.txl_name);
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+				Toast.makeText(getActivity(), "请长按列表项", Toast.LENGTH_SHORT).show();	
+			}
+		});
+		listView.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 				listView.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
+					
 					@Override
 					public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
-						menu.setHeaderTitle(entity.txl_name);
+						menu.setHeaderTitle("选择操作");
 						menu.add(0, 1, Menu.NONE, "拨打电话");
 						menu.add(0, 2, Menu.NONE, "发送短信");
 						menu.add(0, 3, Menu.NONE, "复制到剪切板");
 						menu.add(0, 4, Menu.NONE, "发送邮件");
 						menu.add(0, 5, Menu.NONE, "取消");
+						
 					}
 				});
+				return false;
 			}
 		});
+		
+//		listView.setOnItemClickListener(new OnItemClickListener() {
+//			@Override
+//			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//				// 这里要利用adapter.getItem(position)来获取当前position所对应的对象
+//				// ((SortModel)adapter.getItem(position)).getName()
+//				//Log.d(TAG, "按钮成功");
+//				//Toast.makeText(getActivity(), adapter.getItem(position).toString(), Toast.LENGTH_SHORT);
+//				//	TXLEntity entity = (TXLEntity) adapter.getItem(position);
+//				//Log.d(TAG,entity.txl_name);
+//				listView.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
+//					@Override
+//					public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+//						menu.setHeaderTitle("选择操作");
+//						menu.add(0, 1, Menu.NONE, "拨打电话");
+//						menu.add(0, 2, Menu.NONE, "发送短信");
+//						menu.add(0, 3, Menu.NONE, "复制到剪切板");
+//						menu.add(0, 4, Menu.NONE, "发送邮件");
+//						menu.add(0, 5, Menu.NONE, "取消");
+//					}
+//				});
+//			}
+//		});
 
 		List<TXLEntity> list = new ArrayList<TXLEntity>();
 		list = dbManager.querytxl();
@@ -205,19 +235,7 @@ public class TXLFragment extends SherlockFragment {
 			Toast.makeText(getActivity(), name + "信息复制成功！", Toast.LENGTH_SHORT).show();
 			break;
 		case 4:
-			// 建立Intent对象
-			Intent intent = new Intent();
-			// 设置对象动作
-			intent.setAction(Intent.ACTION_SEND);
-			// 设置对方邮件地址
-			intent.putExtra(Intent.EXTRA_EMAIL, new String[] { mail, mail });
-			// 设置标题内容
-			intent.putExtra(Intent.EXTRA_SUBJECT, "我的公会");
-			// 设置邮件文本内容
-			intent.putExtra(Intent.EXTRA_TEXT, "发自我的公会APP");
-			// 启动一个新的ACTIVITY,"Sending mail..."是在启动这个
-			// ACTIVITY的等待时间时所显示的文字
-			startActivity(Intent.createChooser(intent, "Sending    mail..."));
+			Toast.makeText(getActivity(), mail + "正在开发", Toast.LENGTH_SHORT).show();
 			break;
 		case 5:
 			break;
@@ -227,7 +245,8 @@ public class TXLFragment extends SherlockFragment {
 		
 		
 		
-		return super.onContextItemSelected(item);
+		//return super.onContextItemSelected(item);
+		return true;
 	}
 
 	@Override
