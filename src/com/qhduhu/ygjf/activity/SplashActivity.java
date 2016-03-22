@@ -1,6 +1,10 @@
-package com.qhduhu.ygjf;
+package com.qhduhu.ygjf.activity;
 
-import com.qhduhu.ygjf.activity.LoginActivity;
+import com.qhduhu.ygjf.R;
+import com.qhduhu.ygjf.R.anim;
+import com.qhduhu.ygjf.R.id;
+import com.qhduhu.ygjf.R.layout;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" >
+    <ImageView 
+        android:id="@+id/grid_img_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="centerCrop"/>
+    <ImageView 
+        android:src="@drawable/sign_delete"
+        android:id="@+id/grid_img_delete"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_alignParentRight="true"
+        android:padding="2dp"
+        android:visibility="gone"/>
+
+</RelativeLayout>

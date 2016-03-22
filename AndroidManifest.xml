@@ -43,8 +43,8 @@
             android:label="@string/title_activity_dial" >
         </activity>
         <activity
-            android:name=".SplashActivity"
-            android:label="@string/title_activity_splash" >
+            android:name="com.qhduhu.ygjf.activity.SplashActivity"
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

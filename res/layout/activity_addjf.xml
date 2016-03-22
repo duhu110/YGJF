@@ -2,18 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" 
-    android:background="@color/peru">
+    android:background="@color/peru"
+    android:orientation="vertical" >
 
-    <ScrollView 
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
-        <LinearLayout 
+        android:layout_weight="1" >
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp" 
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="16dp" >
 
             <EditText
                 android:id="@+id/addjf_etwhat"
@@ -23,7 +24,36 @@
                 android:hint="描述"
                 android:maxLength="140"
                 android:minLines="3" />
-            
+
+            <com.qhduhu.ygjf.adapter.WrapHeightGridView
+                android:id="@+id/add_imggv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:horizontalSpacing="8dp"
+                android:numColumns="3"
+                android:scrollbars="none"
+                android:verticalSpacing="8dp" >
+            </com.qhduhu.ygjf.adapter.WrapHeightGridView>
         </LinearLayout>
     </ScrollView>
+<LinearLayout 
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+    
+    <Button
+        android:id="@+id/add_photo"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="拍照上传" />
+    <Button
+        android:id="@+id/add_submit"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="提交积分" />
+
+</LinearLayout>
 </LinearLayout>
