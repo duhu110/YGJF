@@ -137,69 +137,68 @@ public class ADDJFActivity extends Activity implements OnClickListener, OnItemCl
 			break;
 		case R.id.add_submit:
 			db = new DBManager(this);
-			byte[] pic1, pic2, pic3, pic4, pic5, pic6, pic7, pic8, pic9;
+			byte[] pic1, pic2;
 			JfEntity entity = new JfEntity();
-			List<JfEntity> entities = new ArrayList<JfEntity>();
-			if (adapter.getItem(0) != null) {
-				Uri uri1 = adapter.getItem(0);
-				Bitmap bitmap1 = GetBitmapFromUri(uri1);
-				pic1 = Bitmap2Bytes(bitmap1);
-				entity.setJf_pic1(pic1);
-			}
-			if (adapter.getItem(1) != null) {
-				Uri uri2 = adapter.getItem(1);
-				Bitmap bitmap2 = GetBitmapFromUri(uri2);
-				pic2 = Bitmap2Bytes(bitmap2);
-				entity.setJf_pic2(pic2);
-			}
-			if (adapter.getItem(2) != null) {
-				Uri uri3 = adapter.getItem(2);
-				Bitmap bitmap3 = GetBitmapFromUri(uri3);
-				pic3 = Bitmap2Bytes(bitmap3);
-				entity.setJf_pic3(pic3);
-			}
-			if (adapter.getItem(3) != null) {
-				Uri uri4 = adapter.getItem(3);
-				Bitmap bitmap4 = GetBitmapFromUri(uri4);
-				pic4 = Bitmap2Bytes(bitmap4);
-				entity.setJf_pic4(pic4);
-			}
-			if (adapter.getItem(4) != null) {
-				Uri uri5 = adapter.getItem(4);
-				Bitmap bitmap5 = GetBitmapFromUri(uri5);
-				pic5 = Bitmap2Bytes(bitmap5);
-				entity.setJf_pic5(pic5);
-			}
-			if (adapter.getItem(5) != null) {
-				Uri uri6 = adapter.getItem(5);
-				Bitmap bitmap6 = GetBitmapFromUri(uri6);
-				pic6 = Bitmap2Bytes(bitmap6);
-				entity.setJf_pic6(pic6);
-			}
-			if (adapter.getItem(6) != null) {
-				Uri uri7 = adapter.getItem(6);
-				Bitmap bitmap7 = GetBitmapFromUri(uri7);
-				pic7 = Bitmap2Bytes(bitmap7);
-				entity.setJf_pic7(pic7);
-			}
-			if (adapter.getItem(7) != null) {
-				Uri uri8 = adapter.getItem(7);
-				Bitmap bitmap8 = GetBitmapFromUri(uri8);
-				pic8 = Bitmap2Bytes(bitmap8);
-				entity.setJf_pic8(pic8);
-			}
-			if (adapter.getItem(8) != null) {
-				Uri uri9 = adapter.getItem(8);
-				Bitmap bitmap9 = GetBitmapFromUri(uri9);
-				pic9 = Bitmap2Bytes(bitmap9);
-				entity.setJf_pic9(pic9);
-			}
+		//	List<JfEntity> entities = new ArrayList<JfEntity>();
+//			if (adapter.getItem(0) != null) {
+//				Uri uri1 = adapter.getItem(0);
+//				Bitmap bitmap1 = GetBitmapFromUri(uri1);
+//				pic1 = Bitmap2Bytes(bitmap1);
+//				entity.setJf_pic1(pic1);
+//			}
+//			if (adapter.getItem(1) != null) {
+//				Uri uri2 = adapter.getItem(1);
+//				Bitmap bitmap2 = GetBitmapFromUri(uri2);
+//				pic2 = Bitmap2Bytes(bitmap2);
+//				entity.setJf_pic2(pic2);
+//			}
+//			if (adapter.getItem(2) != null) {
+//				Uri uri3 = adapter.getItem(2);
+//				Bitmap bitmap3 = GetBitmapFromUri(uri3);
+//				pic3 = Bitmap2Bytes(bitmap3);
+//				entity.setJf_pic3(pic3);
+//			}
+//			if (adapter.getItem(3) != null) {
+//				Uri uri4 = adapter.getItem(3);
+//				Bitmap bitmap4 = GetBitmapFromUri(uri4);
+//				pic4 = Bitmap2Bytes(bitmap4);
+//				entity.setJf_pic4(pic4);
+//			}
+//			if (adapter.getItem(4) != null) {
+//				Uri uri5 = adapter.getItem(4);
+//				Bitmap bitmap5 = GetBitmapFromUri(uri5);
+//				pic5 = Bitmap2Bytes(bitmap5);
+//				entity.setJf_pic5(pic5);
+//			}
+//			if (adapter.getItem(5) != null) {
+//				Uri uri6 = adapter.getItem(5);
+//				Bitmap bitmap6 = GetBitmapFromUri(uri6);
+//				pic6 = Bitmap2Bytes(bitmap6);
+//				entity.setJf_pic6(pic6);
+//			}
+//			if (adapter.getItem(6) != null) {
+//				Uri uri7 = adapter.getItem(6);
+//				Bitmap bitmap7 = GetBitmapFromUri(uri7);
+//				pic7 = Bitmap2Bytes(bitmap7);
+//				entity.setJf_pic7(pic7);
+//			}
+//			if (adapter.getItem(7) != null) {
+//				Uri uri8 = adapter.getItem(7);
+//				Bitmap bitmap8 = GetBitmapFromUri(uri8);
+//				pic8 = Bitmap2Bytes(bitmap8);
+//				entity.setJf_pic8(pic8);
+//			}
+//			if (adapter.getItem(8) != null) {
+//				Uri uri9 = adapter.getItem(8);
+//				Bitmap bitmap9 = GetBitmapFromUri(uri9);
+//				pic9 = Bitmap2Bytes(bitmap9);
+//				entity.setJf_pic9(pic9);
+//			}
 			entity.setJf_descrp(descrp.getText().toString());
 			entity.setJf_type(tvtype.getText().toString());
 			entity.setJf_typedescrp(ettype.getText().toString());
 			entity.setJf(3);
-			entities.add(entity);
-			db.add(entities);
+			db.add(entity);
 			break;
 		default:
 			break;

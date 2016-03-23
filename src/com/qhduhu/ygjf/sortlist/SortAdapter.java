@@ -79,7 +79,7 @@ public class SortAdapter extends BaseAdapter implements SectionIndexer{
 	
 
 
-	final static class ViewHolder {
+	public final static class ViewHolder {
 		TextView tvLetter;
 		TextView tvName;
 		TextView tvTel;

@@ -145,7 +145,7 @@ public class TXLFragment extends SherlockFragment {
 		List<TXLEntity> list = new ArrayList<TXLEntity>();
 		list = dbManager.querytxl();
 		dbManager.closeDB();
-		Log.d("tagggggggggggg", list.get(3).getTxl_dept());
+		//Log.d("tagggggggggggg", list.get(3).getTxl_dept());
 
 		
 		SourceDateList = filledData(list);

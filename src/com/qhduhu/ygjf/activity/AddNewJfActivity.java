@@ -1,16 +1,18 @@
 package com.qhduhu.ygjf.activity;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 
 import com.qhduhu.ygjf.R;
 import com.qhduhu.ygjf.adapter.ImageUtils;
-import com.qhduhu.ygjf.adapter.WrapHeightGridView;
 import com.qhduhu.ygjf.db.DBManager;
+import com.qhduhu.ygjf.entity.JfEntity;
 
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
@@ -87,14 +89,41 @@ public class AddNewJfActivity extends Activity implements OnClickListener {
 			ImageUtils.ShowImagePickDialog(this);
 			break;
 		case R.id.add_submit:
-
+			db = new DBManager(this);
+			byte[] pic1, pic2;
+			JfEntity entity = new JfEntity();
+			
+			Bitmap bitmap1 = getBitmapFromIv(img1);
+			pic1 = Bitmap2Bytes(bitmap1);
+			entity.setJf_pic1(pic1);
+			Bitmap bitmap2 = getBitmapFromIv(img2);
+			pic2 = Bitmap2Bytes(bitmap2);
+			entity.setJf_pic2(pic2);
+			entity.setYg_name("DUHU");
+			entity.setJf_descrp(descrp.getText().toString());
+			entity.setJf_type(tvtype.getText().toString());
+			entity.setJf_typedescrp(ettype.getText().toString());
+			entity.setJf(3);
+			db.add(entity);
+			db.closeDB();
 			break;
 
 		default:
 			break;
 		}
 	}
-
+	private Bitmap getBitmapFromIv(ImageView imageView){
+		View drawingView = imageView;
+		drawingView.buildDrawingCache(true);
+		Bitmap bitmap = drawingView.getDrawingCache(true).copy(Config.RGB_565, false);
+		drawingView.destroyDrawingCache();
+		return bitmap;
+	}
+	private byte[] Bitmap2Bytes(Bitmap bm) {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		bm.compress(Bitmap.CompressFormat.PNG, 100, baos);
+		return baos.toByteArray();
+	}
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (requestCode) {
@@ -121,7 +150,7 @@ public class AddNewJfActivity extends Activity implements OnClickListener {
 				Uri imageUriCamera = ImageUtils.imageUriFromCamera;
 				ContentResolver resolver2 = getContentResolver();
 				BitmapFactory.Options options2 = new BitmapFactory.Options();
-				options2.inSampleSize = 2;// 图片大小，设置越大，图片越不清晰，占用空间越小
+				options2.inSampleSize = 1;// 图片大小，设置越大，图片越不清晰，占用空间越小
 				try {
 					Bitmap bitmap2 = BitmapFactory.decodeStream(resolver2.openInputStream(imageUriCamera), null,
 							options2);

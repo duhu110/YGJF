@@ -52,7 +52,8 @@ public class GridImageAdapter extends BaseAdapter{
 		}else {
 			holder = (ViewHolder) convertView.getTag();
 		}
-		int horizontalSpacing = gv.getHorizontalSpacing();
+		int horizontalSpacing = 3;
+				//gv.getHorizontalSpacing();
 		int width = (gv.getWidth() - horizontalSpacing * 2
 				- gv.getPaddingLeft() - gv.getPaddingRight())/3;
 		RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(width, width);
