@@ -29,7 +29,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public class ADDJFActivity extends Activity implements OnClickListener, OnItemClickListener {
-	private EditText descrp,ettype;
+	private EditText descrp, ettype;
 	private TextView tvtype;
 	private int typeCode = 0;
 	private Button photo, submit;
@@ -59,6 +59,7 @@ public class ADDJFActivity extends Activity implements OnClickListener, OnItemCl
 		submit.setOnClickListener(this);
 
 	}
+
 	private void initview() {
 		descrp = (EditText) findViewById(R.id.addjf_etwhat);
 		photo = (Button) findViewById(R.id.add_photo);
@@ -107,11 +108,11 @@ public class ADDJFActivity extends Activity implements OnClickListener, OnItemCl
 			break;
 		case ImageUtils.REQUEST_CODE_FROM_CAMERA:
 			if (resultCode == RESULT_CANCELED) {
-				ImageUtils.DeleteImageUri(this,ImageUtils.imageUriFromCamera);
-			}else {
-			Uri imageUriCamera = ImageUtils.imageUriFromCamera;
-			imgUris.add(imageUriCamera);
-			updateImgs();
+				ImageUtils.DeleteImageUri(this, ImageUtils.imageUriFromCamera);
+			} else {
+				Uri imageUriCamera = ImageUtils.imageUriFromCamera;
+				imgUris.add(imageUriCamera);
+				updateImgs();
 			}
 			break;
 		default:
@@ -119,12 +120,11 @@ public class ADDJFActivity extends Activity implements OnClickListener, OnItemCl
 		}
 	}
 
-
 	private void updateImgs() {
 		if (imgUris.size() > 0) {
 			imggv.setVisibility(View.VISIBLE);
 			adapter.notifyDataSetChanged();
-		}else {
+		} else {
 			imggv.setVisibility(View.GONE);
 		}
 	}
@@ -137,45 +137,63 @@ public class ADDJFActivity extends Activity implements OnClickListener, OnItemCl
 			break;
 		case R.id.add_submit:
 			db = new DBManager(this);
-			byte[] pic1,pic2,pic3,pic4,pic5,pic6,pic7,pic8,pic9;
+			byte[] pic1, pic2, pic3, pic4, pic5, pic6, pic7, pic8, pic9;
 			JfEntity entity = new JfEntity();
 			List<JfEntity> entities = new ArrayList<JfEntity>();
-			Uri uri1 = adapter.getItem(0);
-			Bitmap bitmap1 = GetBitmapFromUri(uri1);
-			pic1 = Bitmap2Bytes(bitmap1);
-			entity.setJf_pic1(pic1);
-			Uri uri2 = adapter.getItem(1);
-			Bitmap bitmap2 = GetBitmapFromUri(uri2);
-			pic2 = Bitmap2Bytes(bitmap2);
-			entity.setJf_pic2(pic2);
-			Uri uri3 = adapter.getItem(2);
-			Bitmap bitmap3 = GetBitmapFromUri(uri3);
-			pic3 = Bitmap2Bytes(bitmap3);
-			entity.setJf_pic3(pic3);
-			Uri uri4 = adapter.getItem(3);
-			Bitmap bitmap4 = GetBitmapFromUri(uri4);
-			pic4 = Bitmap2Bytes(bitmap4);
-			entity.setJf_pic4(pic4);
-			Uri uri5 = adapter.getItem(4);
-			Bitmap bitmap5 = GetBitmapFromUri(uri5);
-			pic5 = Bitmap2Bytes(bitmap5);
-			entity.setJf_pic5(pic5);
-			Uri uri6 = adapter.getItem(5);
-			Bitmap bitmap6 = GetBitmapFromUri(uri6);
-			pic6 = Bitmap2Bytes(bitmap6);
-			entity.setJf_pic6(pic6);
-			Uri uri7 = adapter.getItem(6);
-			Bitmap bitmap7 = GetBitmapFromUri(uri7);
-			pic7 = Bitmap2Bytes(bitmap7);
-			entity.setJf_pic7(pic7);
-			Uri uri8 = adapter.getItem(7);
-			Bitmap bitmap8 = GetBitmapFromUri(uri8);
-			pic8 = Bitmap2Bytes(bitmap8);
-			entity.setJf_pic8(pic8);
-			Uri uri9 = adapter.getItem(8);
-			Bitmap bitmap9 = GetBitmapFromUri(uri9);
-			pic9 = Bitmap2Bytes(bitmap9);
-			entity.setJf_pic9(pic9);
+			if (adapter.getItem(0) != null) {
+				Uri uri1 = adapter.getItem(0);
+				Bitmap bitmap1 = GetBitmapFromUri(uri1);
+				pic1 = Bitmap2Bytes(bitmap1);
+				entity.setJf_pic1(pic1);
+			}
+			if (adapter.getItem(1) != null) {
+				Uri uri2 = adapter.getItem(1);
+				Bitmap bitmap2 = GetBitmapFromUri(uri2);
+				pic2 = Bitmap2Bytes(bitmap2);
+				entity.setJf_pic2(pic2);
+			}
+			if (adapter.getItem(2) != null) {
+				Uri uri3 = adapter.getItem(2);
+				Bitmap bitmap3 = GetBitmapFromUri(uri3);
+				pic3 = Bitmap2Bytes(bitmap3);
+				entity.setJf_pic3(pic3);
+			}
+			if (adapter.getItem(3) != null) {
+				Uri uri4 = adapter.getItem(3);
+				Bitmap bitmap4 = GetBitmapFromUri(uri4);
+				pic4 = Bitmap2Bytes(bitmap4);
+				entity.setJf_pic4(pic4);
+			}
+			if (adapter.getItem(4) != null) {
+				Uri uri5 = adapter.getItem(4);
+				Bitmap bitmap5 = GetBitmapFromUri(uri5);
+				pic5 = Bitmap2Bytes(bitmap5);
+				entity.setJf_pic5(pic5);
+			}
+			if (adapter.getItem(5) != null) {
+				Uri uri6 = adapter.getItem(5);
+				Bitmap bitmap6 = GetBitmapFromUri(uri6);
+				pic6 = Bitmap2Bytes(bitmap6);
+				entity.setJf_pic6(pic6);
+			}
+			if (adapter.getItem(6) != null) {
+				Uri uri7 = adapter.getItem(6);
+				Bitmap bitmap7 = GetBitmapFromUri(uri7);
+				pic7 = Bitmap2Bytes(bitmap7);
+				entity.setJf_pic7(pic7);
+			}
+			if (adapter.getItem(7) != null) {
+				Uri uri8 = adapter.getItem(7);
+				Bitmap bitmap8 = GetBitmapFromUri(uri8);
+				pic8 = Bitmap2Bytes(bitmap8);
+				entity.setJf_pic8(pic8);
+			}
+			if (adapter.getItem(8) != null) {
+				Uri uri9 = adapter.getItem(8);
+				Bitmap bitmap9 = GetBitmapFromUri(uri9);
+				pic9 = Bitmap2Bytes(bitmap9);
+				entity.setJf_pic9(pic9);
+			}
 			entity.setJf_descrp(descrp.getText().toString());
 			entity.setJf_type(tvtype.getText().toString());
 			entity.setJf_typedescrp(ettype.getText().toString());
@@ -187,13 +205,18 @@ public class ADDJFActivity extends Activity implements OnClickListener, OnItemCl
 			break;
 		}
 	}
+
 	private byte[] Bitmap2Bytes(Bitmap bm) {
-		         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		         bm.compress(Bitmap.CompressFormat.PNG, 100, baos);
-		         return baos.toByteArray();
-		     }
-	private Bitmap GetBitmapFromUri(Uri uri){
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		bm.compress(Bitmap.CompressFormat.PNG, 100, baos);
+		return baos.toByteArray();
+	}
+
+	private Bitmap GetBitmapFromUri(Uri uri) {
 		Bitmap bitmap;
+		if (uri == null) {
+			return null;
+		}
 		try {
 			bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
 			return bitmap;
@@ -211,7 +234,7 @@ public class ADDJFActivity extends Activity implements OnClickListener, OnItemCl
 	// getMenuInflater().inflate(R.menu.addj, menu);
 	// return true;
 	// }
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle action bar item clicks here. The action bar will

@@ -14,5 +14,6 @@
     <string name="menu_logout">退出</string>
     <string name="title_activity_dial">详情</string>
     <string name="title_activity_splash">SplashActivity</string>
+    <string name="title_activity_add_new_jf">新增活动</string>
 
 </resources>

@@ -3,6 +3,7 @@ package com.qhduhu.ygjf.fragment;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.qhduhu.ygjf.R;
 import com.qhduhu.ygjf.activity.ADDJFActivity;
+import com.qhduhu.ygjf.activity.AddNewJfActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -48,17 +49,17 @@ public class NewJFFragment extends SherlockFragment implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.new_readbook:
-			startActivity(new Intent(getActivity(), ADDJFActivity.class).putExtra("typeCode", readTypeCode));
+			startActivity(new Intent(getActivity(), AddNewJfActivity.class).putExtra("typeCode", readTypeCode));
 			break;
 		case R.id.new_sport:
-			startActivity(new Intent(getActivity(), ADDJFActivity.class).putExtra("typeCode", sportTypeCode));
+			startActivity(new Intent(getActivity(), AddNewJfActivity.class).putExtra("typeCode", sportTypeCode));
 			break;
 		case R.id.new_dev:
-				startActivity(new Intent(getActivity(), ADDJFActivity.class).putExtra("typeCode", devTypeCode));
+				startActivity(new Intent(getActivity(), AddNewJfActivity.class).putExtra("typeCode", devTypeCode));
 		
 		break;
 		case R.id.new_chess:
-			startActivity(new Intent(getActivity(), ADDJFActivity.class).putExtra("typeCode", chessTypeCode));
+			startActivity(new Intent(getActivity(), AddNewJfActivity.class).putExtra("typeCode", chessTypeCode));
 			break;
 		}
 		
