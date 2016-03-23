@@ -53,7 +53,7 @@ public class JfListAdapter extends BaseAdapter {
 		ViewHolder viewHolder = null;
 		if (view == null) {
 			viewHolder = new ViewHolder();
-			view = LayoutInflater.from(mContext).inflate(R.layout.contact_item, null);
+			view = LayoutInflater.from(mContext).inflate(R.layout.item_jf_list, null);
 			viewHolder.tvYgName = (TextView) view.findViewById(R.id.item_jf_name);
 			viewHolder.tvType = (TextView) view.findViewById(R.id.item_jf_type);
 			viewHolder.tvDscrp = (TextView) view.findViewById(R.id.item_jf_dscrp);
@@ -63,15 +63,30 @@ public class JfListAdapter extends BaseAdapter {
 		} else {
 			viewHolder = (ViewHolder) view.getTag();
 		}
-		viewHolder.tvYgName.setText(this.list.get(position).getYg_name());
-		String string = this.list.get(position).getJf_type() + this.list.get(position).getJf_typedescrp();
-		viewHolder.tvType.setText(string);
-		viewHolder.tvDscrp.setText(this.list.get(position).getJf_descrp());
+		if (this.list.get(position) == null) {
+			return null;
+		}
+		String name = this.list.get(position).getYg_name();
+		if (name != null) {
+			viewHolder.tvYgName.setText(name);
+		}
+		String typeString = this.list.get(position).getJf_type() + this.list.get(position).getJf_typedescrp();
+		if (typeString != null) {
+			viewHolder.tvType.setText(typeString);
+		}
+		String dscrp = this.list.get(position).getJf_descrp();
+		if (dscrp != null) {
+			viewHolder.tvDscrp.setText(dscrp);
+		}
 		Bitmap bitmap1,bitmap2;
-		bitmap1 = Bytes2Bimap(this.list.get(position).getJf_pic1());
-		bitmap2 = Bytes2Bimap(this.list.get(position).getJf_pic2());
-		viewHolder.img1.setImageBitmap(bitmap1);
-		viewHolder.img2.setImageBitmap(bitmap2);
+		if (this.list.get(position).getJf_pic1() != null) {
+			bitmap1 = Bytes2Bimap(this.list.get(position).getJf_pic1());
+			viewHolder.img1.setImageBitmap(bitmap1);
+		}
+		if (this.list.get(position).getJf_pic2() != null) {
+			bitmap2 = Bytes2Bimap(this.list.get(position).getJf_pic2());
+			viewHolder.img2.setImageBitmap(bitmap2);
+		}
 		
 		return view;
 	}

@@ -92,17 +92,28 @@ public class AddNewJfActivity extends Activity implements OnClickListener {
 			db = new DBManager(this);
 			byte[] pic1, pic2;
 			JfEntity entity = new JfEntity();
-			
-			Bitmap bitmap1 = getBitmapFromIv(img1);
-			pic1 = Bitmap2Bytes(bitmap1);
-			entity.setJf_pic1(pic1);
-			Bitmap bitmap2 = getBitmapFromIv(img2);
-			pic2 = Bitmap2Bytes(bitmap2);
-			entity.setJf_pic2(pic2);
+			if (img1.getDrawable() != null) {
+				Bitmap bitmap1 = getBitmapFromIv(img1);
+				pic1 = Bitmap2Bytes(bitmap1);
+				entity.setJf_pic1(pic1);
+			}
+			if (img2.getDrawable() != null) {
+				Bitmap bitmap2 = getBitmapFromIv(img2);
+				pic2 = Bitmap2Bytes(bitmap2);
+				entity.setJf_pic2(pic2);
+			}
 			entity.setYg_name("DUHU");
-			entity.setJf_descrp(descrp.getText().toString());
-			entity.setJf_type(tvtype.getText().toString());
-			entity.setJf_typedescrp(ettype.getText().toString());
+			if (descrp.getText().toString() != null) {
+				entity.setJf_descrp(descrp.getText().toString());
+			}
+			if (tvtype.getText().toString() != null) {
+				
+				entity.setJf_type(tvtype.getText().toString());
+			}
+			if (ettype.getText().toString() != null) {
+				
+				entity.setJf_typedescrp(ettype.getText().toString());
+			}
 			entity.setJf(3);
 			db.add(entity);
 			db.closeDB();
