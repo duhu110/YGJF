@@ -14,6 +14,10 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 public class NewJFFragment extends SherlockFragment implements OnClickListener {
+	private int readTypeCode = 1;
+	private int sportTypeCode = 2;
+	private int chessTypeCode = 3;
+	private int devTypeCode = 4;
 	RelativeLayout read,sport,dev,chess;
 	public static NewJFFragment newInstance(){
 		NewJFFragment fragment = new NewJFFragment();
@@ -24,6 +28,7 @@ public class NewJFFragment extends SherlockFragment implements OnClickListener {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_newjf, null);
 		
+
 		return view;
 	}
 	@Override
@@ -43,17 +48,17 @@ public class NewJFFragment extends SherlockFragment implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.new_readbook:
-			startActivity(new Intent(getActivity(), ADDJFActivity.class).putExtra("addnew", "read"));
+			startActivity(new Intent(getActivity(), ADDJFActivity.class).putExtra("typeCode", readTypeCode));
 			break;
 		case R.id.new_sport:
-			startActivity(new Intent(getActivity(), ADDJFActivity.class).putExtra("addnew", "sport"));
+			startActivity(new Intent(getActivity(), ADDJFActivity.class).putExtra("typeCode", sportTypeCode));
 			break;
 		case R.id.new_dev:
-				startActivity(new Intent(getActivity(), ADDJFActivity.class).putExtra("addnew", "dev"));
+				startActivity(new Intent(getActivity(), ADDJFActivity.class).putExtra("typeCode", devTypeCode));
 		
 		break;
 		case R.id.new_chess:
-			startActivity(new Intent(getActivity(), ADDJFActivity.class).putExtra("addnew", "chess"));
+			startActivity(new Intent(getActivity(), ADDJFActivity.class).putExtra("typeCode", chessTypeCode));
 			break;
 		}
 		

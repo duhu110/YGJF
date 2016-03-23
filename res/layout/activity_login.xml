@@ -47,8 +47,8 @@
         android:layout_height="40dp"
         android:id="@+id/login_btn"
        	android:background="@drawable/login_btn"
-       	android:text="登      录"
        	android:textColor="@color/whitesmoke"
+       	android:text="登      录"
        	android:textSize="18dp"/>
 
 

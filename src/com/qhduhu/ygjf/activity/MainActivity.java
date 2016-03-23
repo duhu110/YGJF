@@ -15,6 +15,7 @@ import com.qhduhu.ygjf.service.GetTXLListService;
 import com.qhduhu.ygjf.service.GetTXLListServiceIMPL;
 import com.viewpagerindicator.TabPageIndicator;
 
+import android.R.string;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -26,6 +27,7 @@ public class MainActivity extends SherlockFragmentActivity {
 	private GetTXLListService gettxllist = new GetTXLListServiceIMPL();
 	private DBManager db ;
 	private String TAG = "MainActivity++++++++TAG";
+	public string username;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,7 @@ public class MainActivity extends SherlockFragmentActivity {
 				Log.d(TAG, list.get(3).txl_name);
 				db.DeleteTXL();
 				db.addtxl(list);
+				db.closeDB();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -70,28 +73,8 @@ public class MainActivity extends SherlockFragmentActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
         case R.id.menu_about:// 点击返回图标事件
-        	
+ 	
             startActivity(new Intent(this, AboutActivity.class));
-            
-//        case R.id.menu_refresh:
-//        	Log.d("TAGGGGGGGGGGG", "按钮成功");
-//        	new Thread(new Runnable() {
-//    			@Override
-//				public void run() {
-//    				try {
-//						txlEntities = gettxllist.getTXLList();
-//						Log.d("taggggggggggg", "获取数据成功");
-//					} catch (Exception e) {
-//						e.printStackTrace();
-//						Log.d("taggggggggggggggggggg", "获取数据失败");
-//					}
-//					}
-//				}
-//			).run();
-//			System.out.println(txlEntities);
-//			db= new DBManager(this);
-//        	db.addtxl(txlEntities);
-//			db.closeDB();
         default:
             return super.onOptionsItemSelected(item);
         }

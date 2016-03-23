@@ -17,9 +17,12 @@ public class DBHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-//		db.execSQL("CREATE TABLE IF NOT EXISTS jf" +  
-//                "(_id INTEGER PRIMARY KEY AUTOINCREMENT, yg_name VARCHAR,"
-//                + " jf_descrp VARCHAR,jf_pic BLOB,jf INTEGER)");
+		db.execSQL("CREATE TABLE IF NOT EXISTS jf" +  
+                "(_id INTEGER PRIMARY KEY AUTOINCREMENT, yg_name VARCHAR,"
+                + " jf_descrp VARCHAR,jf_type VARCHAR,jf_typedescrp VARCHAR,"
+                + "jf_pic1 BLOB,jf_pic2 BLOB,jf_pic3 BLOB,jf_pic4 BLOB,"
+                + "jf_pic5 BLOB,jf_pic6 BLOB,jf_pic7 BLOB,jf_pic8 BLOB,"
+                + "jf_pic9 BLOB,jf INTEGER)");
 		String sql="CREATE TABLE IF NOT EXISTS txl (id INTEGER PRIMARY KEY "
 				+ "AUTOINCREMENT,txl_name VARCHAR,txl_tel VARCHAR,txl_dept "
 				+ "VARCHAR,txl_mail VARCHAR) ";

@@ -14,8 +14,7 @@ public class MainFragmentAdapter extends FragmentPagerAdapter {
 
 	public MainFragmentAdapter(FragmentManager fm) {
 		super(fm);
-		// TODO Auto-generated constructor stub
-	}
+			}
 
 	public MainFragmentAdapter(FragmentManager fm, Context context) {
 		super(fm);

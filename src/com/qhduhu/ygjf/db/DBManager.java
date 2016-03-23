@@ -3,7 +3,7 @@ package com.qhduhu.ygjf.db;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.qhduhu.ygjf.entity.Jf;
+import com.qhduhu.ygjf.entity.JfEntity;
 import com.qhduhu.ygjf.entity.TXLEntity;
 
 import android.content.Context;
@@ -21,12 +21,21 @@ public class DBManager {
         //所以要确保context已初始化,我们可以把实例化DBManager的步骤放在Activity的onCreate里  
         db = helper.getWritableDatabase();  
 	}
-    public void add(List<Jf> jfs) {
+    public void add(List<JfEntity> jfs) {
     	db.beginTransaction();  //开始事务  
         try {  
-            for (Jf jf : jfs) {  
-                db.execSQL("INSERT INTO jf VALUES(null, ?, ?, ?, ?)",
-                		new Object[]{jf.yg_name,jf.jf_descrp,jf.jf_pic,jf.jf});  
+//        	"(_id INTEGER PRIMARY KEY AUTOINCREMENT, yg_name VARCHAR,"
+//                    + " jf_descrp VARCHAR,jf_type VARCHAR,jf_typedescrp VARCHAR,"
+//                    + "jf_pic1 BLOB,jf_pic2 BLOB,jf_pic3 BLOB,jf_pic4 BLOB,"
+//                    + "jf_pic5 BLOB,jf_pic6 BLOB,jf_pic7 BLOB,jf_pic8 BLOB,"
+//                    + "jf_pic9 BLOB,jf INTEGER)");
+            for (JfEntity jf : jfs) {  
+                db.execSQL("INSERT INTO jf VALUES(null, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                		new Object[]{jf.getYg_name(),jf.getJf_descrp(),jf.getJf_type(),
+                				jf.getJf_typedescrp(),jf.getJf_pic1(),
+                				jf.getJf_pic2(),jf.getJf_pic3(),jf.getJf_pic4(),
+                				jf.getJf_pic5(),jf.getJf_pic6(),jf.getJf_pic7(),
+                				jf.getJf_pic8(),jf.getJf_pic9(),jf.getJf()});  
             }  
             db.setTransactionSuccessful();  //设置事务成功完成  
         } finally {  
@@ -76,16 +85,26 @@ public class DBManager {
 //    public void deleteOldPerson(Person person) {  
 //        db.delete("person", "age >= ?", new String[]{String.valueOf(person.age)});  
 //    }  
-    public List<Jf> query() {  
-        ArrayList<Jf> jfs = new ArrayList<Jf>();  
+    public List<JfEntity> query() {  
+        ArrayList<JfEntity> jfs = new ArrayList<JfEntity>();  
         Cursor c = queryTheCursor();  
         while (c.moveToNext()) {  
-            Jf jf = new Jf();  
-            jf._id = c.getInt(c.getColumnIndex("_id"));  
-            jf.yg_name = c.getString(c.getColumnIndex("yg_name"));  
-            jf.jf_descrp = c.getString(c.getColumnIndex("jf_descrp"));
-            jf.jf_pic = c.getBlob(c.getColumnIndex("jf_pic"));
-            jf.jf = c.getInt(c.getColumnIndex("jf"));  
+            JfEntity jf = new JfEntity();  
+            jf.set_id(c.getInt(c.getColumnIndex("_id")));  
+            jf.setYg_name(c.getString(c.getColumnIndex("yg_name")));  
+            jf.setJf_descrp(c.getString(c.getColumnIndex("jf_descrp")));
+            jf.setJf_type(c.getString(c.getColumnIndex("jf_type")));
+            jf.setJf_typedescrp(c.getString(c.getColumnIndex("jf_typedescrp")));
+            jf.setJf_pic1(c.getBlob(c.getColumnIndex("jf_pic1")));
+            jf.setJf_pic2(c.getBlob(c.getColumnIndex("jf_pic2")));
+            jf.setJf_pic3(c.getBlob(c.getColumnIndex("jf_pic3")));
+            jf.setJf_pic4(c.getBlob(c.getColumnIndex("jf_pic4")));
+            jf.setJf_pic5(c.getBlob(c.getColumnIndex("jf_pic5")));
+            jf.setJf_pic6(c.getBlob(c.getColumnIndex("jf_pic6")));
+            jf.setJf_pic7(c.getBlob(c.getColumnIndex("jf_pic7")));
+            jf.setJf_pic8(c.getBlob(c.getColumnIndex("jf_pic8")));
+            jf.setJf_pic9(c.getBlob(c.getColumnIndex("jf_pic9")));
+            jf.setJf(c.getInt(c.getColumnIndex("jf")));  
             jfs.add(jf);  
         }  
         c.close();  
